@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#06070d">
+<title>أثر | تصوير المناسبات</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&family=Reem+Kufi:wght@500;600;700&family=Bricolage+Grotesque:wght@500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#06070d; --night:#0d0b24; --iris:#6d4aff; --cyan:#6ff0ff; --peach:#ffb089; --pearl:#f4f1ff; --rose:#ff6b8b;
+  --muted:rgba(244,241,255,.68);
+  --display:'Reem Kufi','Segoe UI',Tahoma,sans-serif;
+  --body:'IBM Plex Sans Arabic','Segoe UI',Tahoma,sans-serif;
+  --spring:cubic-bezier(.2,.9,.3,1.25);
+  --out:cubic-bezier(.16,1,.3,1);
+}
+html[lang=fr],html[lang=en]{
+  --display:'Bricolage Grotesque','Segoe UI',sans-serif;
+  --body:'Plus Jakarta Sans','Segoe UI',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--ink);scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:var(--body);color:var(--pearl);line-height:1.8;overflow-x:hidden;background:transparent}
+html:not([lang=ar]) body{line-height:1.65}
+button,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+a{color:inherit;text-decoration:none}
+
+/* ---------- backdrop ---------- */
+.aurora{position:fixed;inset:0;z-index:-3;overflow:hidden;background:var(--ink)}
+.aurora i{position:absolute;border-radius:50%;filter:blur(90px);animation:drift 24s ease-in-out infinite alternate}
+.aurora i:nth-child(1){width:60vmax;height:60vmax;background:#4326c9;top:-24vmax;right:-18vmax;opacity:.6}
+.aurora i:nth-child(2){width:46vmax;height:46vmax;background:#0fb0c4;bottom:-18vmax;left:-14vmax;opacity:.34;animation-delay:-9s}
+.aurora i:nth-child(3){width:30vmax;height:30vmax;background:#ff8a5c;top:42%;left:38%;opacity:.2;animation-delay:-15s}
+@keyframes drift{to{transform:translate(6vmax,-4vmax) scale(1.18)}}
+#gl{position:fixed;inset:0;width:100%;height:100%;z-index:-2;pointer-events:none}
+.grain{position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.07;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+.progress{position:fixed;top:0;right:0;left:0;height:3px;z-index:70;transform-origin:right;transform:scaleX(0);background:linear-gradient(270deg,var(--cyan),var(--iris),var(--peach))}
+html[dir=ltr] .progress{transform-origin:left;background:linear-gradient(90deg,var(--cyan),var(--iris),var(--peach))}
+.cur{position:fixed;top:0;left:0;width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.55);
+  backdrop-filter:blur(2px) brightness(1.5);pointer-events:none;z-index:80;opacity:0;transition:opacity .3s}
+
+/* ---------- liquid glass ---------- */
+.glass{position:relative;
+  background:linear-gradient(140deg,rgba(255,255,255,.15),rgba(255,255,255,.04) 55%,rgba(255,255,255,.09));
+  -webkit-backdrop-filter:blur(26px) saturate(180%);backdrop-filter:blur(26px) saturate(180%);
+  border:1px solid rgba(255,255,255,.2);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.4),inset 0 -1px 0 rgba(255,255,255,.06),inset 0 0 40px rgba(255,255,255,.04),0 30px 80px -20px rgba(0,0,0,.6)}
+.glass::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .35s;
+  background:radial-gradient(320px circle at var(--mx,50%) var(--my,0%),rgba(255,255,255,.22),transparent 60%)}
+.glass:hover::before{opacity:1}
+@media (hover:hover) and (pointer:fine){
+  .liquid{backdrop-filter:url(#lg) blur(10px) saturate(190%)}
+}
+
+/* ---------- nav ---------- */
+.nav{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:40;width:min(940px,calc(100% - 24px));
+  display:flex;align-items:center;justify-content:space-between;gap:10px;padding-block:10px;padding-inline:14px 12px;border-radius:999px;
+  animation:navIn 1.2s var(--out) .2s both}
+@keyframes navIn{from{opacity:0;transform:translate(-50%,-30px) scale(.94)}}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-size:1.4rem;font-weight:700;padding-inline-start:8px}
+.brand svg{width:30px;height:30px;animation:spin 14s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.lang{display:flex;gap:2px;padding:3px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);direction:ltr}
+.lang button{border:0;background:transparent;cursor:pointer;padding:6px 12px;border-radius:999px;font-size:.78rem;font-weight:600;letter-spacing:.04em;
+  font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;color:var(--muted);transition:background .3s,color .3s}
+.lang button[aria-pressed=true]{background:linear-gradient(135deg,#a5f7ff,#7f62ff);color:#07060f}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:0;cursor:pointer;border-radius:999px;
+  padding:14px 28px;font-weight:600;font-size:1rem;position:relative;overflow:hidden;
+  transition:transform .35s var(--out),box-shadow .35s;will-change:transform}
+.btn.primary{color:#07060f;background:linear-gradient(135deg,#a5f7ff,#7f62ff);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 14px 40px -8px rgba(109,74,255,.8)}
+.btn.primary::after,.btn.wa::after{content:"";position:absolute;top:0;bottom:0;width:60%;right:-80%;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);transform:skewX(20deg);transition:right .8s var(--out)}
+.btn.primary:hover::after,.btn.wa:hover::after{right:130%}
+.btn.sm{padding:10px 20px;font-size:.92rem}
+.btn.wa{width:100%;padding:16px 24px;font-size:1.05rem;color:#04170c;background:linear-gradient(135deg,#4ff58f,#19c26b);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 16px 40px -10px rgba(37,211,102,.7)}
+.btn.wa svg{width:22px;height:22px}
+.btn:active{transform:scale(.97)}
+
+/* ---------- hero ---------- */
+.hero{min-height:100svh;display:flex;align-items:center;padding:120px clamp(20px,6vw,90px) 90px;position:relative}
+.hero-copy{max-width:640px;position:relative;z-index:2}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(2.7rem,8.2vw,6.6rem);line-height:1.12;letter-spacing:0}
+html:not([lang=ar]) .hero-copy{max-width:720px}
+html:not([lang=ar]) h1{font-size:clamp(2.4rem,6.6vw,5.3rem);line-height:1.04;letter-spacing:-.02em}
+.w{display:inline-block;overflow:hidden;vertical-align:top;padding:.08em .04em .22em;margin-bottom:-.2em}
+.w>span{display:inline-block;transform:translateY(115%) rotate(5deg);animation:rise 1.2s var(--out) forwards;animation-delay:calc(var(--d0,.45s) + var(--i)*.1s)}
+@keyframes rise{to{transform:none}}
+.lead{margin-top:26px;max-width:46ch;font-size:clamp(1.02rem,2.2vw,1.2rem);color:var(--muted);opacity:0;animation:fade 1s ease 1.5s forwards}
+.cta{margin-top:34px;display:flex;flex-wrap:wrap;align-items:center;gap:18px;opacity:0;animation:fade 1s ease 1.75s forwards}
+.cta small{color:var(--muted);font-size:.9rem}
+@keyframes fade{to{opacity:1}}
+.chip{position:absolute;z-index:1;display:flex;align-items:center;gap:10px;padding:12px 20px;border-radius:999px;font-weight:500;font-size:.95rem;
+  opacity:0;animation:fade 1s ease 2s forwards,floaty 7s ease-in-out infinite alternate;transform:translate(var(--px,0),var(--py,0))}
+.chip b{width:10px;height:10px;border-radius:50%;background:var(--c);box-shadow:0 0 14px var(--c)}
+.chip.c1{top:24%;inset-inline-end:7%}
+.chip.c2{top:54%;inset-inline-end:30%;animation-delay:2.2s,-2s}
+.chip.c3{top:72%;inset-inline-end:9%;animation-delay:2.4s,-4s}
+@keyframes floaty{to{margin-top:-18px}}
+.scrollhint{position:absolute;bottom:26px;left:50%;width:1px;height:54px;background:linear-gradient(var(--pearl),transparent);transform-origin:top;animation:hint 2.2s ease-in-out infinite}
+@keyframes hint{0%{transform:scaleY(0)}50%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
+
+.marquee{overflow:hidden;padding:26px 0;direction:ltr;border-block:1px solid rgba(255,255,255,.08);background:rgba(6,7,13,.35);backdrop-filter:blur(8px)}
+.marquee div{display:flex;gap:56px;width:max-content;animation:slide 32s linear infinite}
+.marquee span{font-family:var(--display);font-size:clamp(2rem,5vw,3.6rem);font-weight:700;color:transparent;-webkit-text-stroke:1px rgba(244,241,255,.5);white-space:nowrap;display:flex;align-items:center;gap:56px;direction:rtl}
+html[dir=ltr] .marquee span{direction:ltr}
+.marquee svg{width:34px;height:34px;opacity:.7}
+@keyframes slide{to{transform:translateX(-50%)}}
+
+/* ---------- booking ---------- */
+.book{padding:clamp(70px,10vw,130px) clamp(16px,5vw,70px) 120px;max-width:1380px;margin:auto}
+.book-head{margin-bottom:46px;max-width:620px}
+h2{font-family:var(--display);font-size:clamp(2.1rem,5vw,3.7rem);line-height:1.2}
+.book-head p{color:var(--muted);margin-top:12px;font-size:1.1rem}
+.book-grid{display:grid;grid-template-columns:minmax(0,1fr) 390px;gap:30px;align-items:start}
+.steps{display:grid;gap:22px}
+.step{border-radius:32px;padding:clamp(20px,3vw,34px);opacity:0;transform:translateY(40px);filter:blur(10px);
+  transition:opacity .9s var(--out),transform .9s var(--out),filter .9s var(--out)}
+.step.in{opacity:1;transform:none;filter:none}
+.step h3{display:flex;align-items:center;gap:14px;font-family:var(--display);font-size:1.5rem;margin-bottom:22px}
+.num{display:grid;place-items:center;flex:none;width:38px;height:38px;border-radius:50%;font-size:1rem;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;font-weight:600;
+  background:linear-gradient(135deg,var(--cyan),var(--iris));color:#07060f}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;perspective:900px}
+.opt{position:relative;text-align:start;cursor:pointer;display:flex;flex-direction:column;gap:6px;overflow:hidden;
+  padding:18px 18px 16px;border-radius:24px;border:1px solid rgba(255,255,255,.14);
+  background:linear-gradient(145deg,rgba(255,255,255,.1),rgba(255,255,255,.03));
+  -webkit-backdrop-filter:blur(16px) saturate(160%);backdrop-filter:blur(16px) saturate(160%);
+  transition:transform .4s var(--spring),border-color .3s,background .3s,box-shadow .4s;transform-style:preserve-3d;
+  transform:rotateX(var(--rx,0)) rotateY(var(--ry,0))}
+.opt::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s;
+  background:radial-gradient(240px circle at var(--mx,50%) var(--my,0%),rgba(255,255,255,.25),transparent 62%)}
+.opt:hover::before{opacity:1}
+.opt .o-icon{font-size:1.7rem;line-height:1;width:48px;height:48px;display:grid;place-items:center;border-radius:16px;margin-bottom:4px;
+  background:rgba(255,255,255,.1);box-shadow:inset 0 1px 0 rgba(255,255,255,.35)}
+.o-name{font-weight:600;font-size:1.08rem;padding-inline-end:30px}
+.o-desc{font-size:.88rem;color:var(--muted);line-height:1.6}
+.o-price{margin-top:auto;padding-top:8px;font-weight:600;font-size:.95rem;color:var(--cyan);font-variant-numeric:tabular-nums}
+.chk{position:absolute;top:16px;inset-inline-end:16px;width:24px;height:24px;border-radius:50%;border:1.5px solid rgba(255,255,255,.3);transition:.3s}
+.chk svg{width:100%;height:100%;padding:5px;stroke:#07060f;stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:24;stroke-dashoffset:24;transition:stroke-dashoffset .45s var(--out) .1s}
+.opt[aria-checked=true],.opt[aria-pressed=true]{border-color:rgba(111,240,255,.75);
+  background:linear-gradient(145deg,rgba(111,240,255,.2),rgba(109,74,255,.2));
+  box-shadow:0 0 0 1px rgba(111,240,255,.35),0 20px 50px -14px rgba(109,74,255,.8),inset 0 1px 0 rgba(255,255,255,.4);
+  animation:pop .6s var(--spring)}
+.opt[aria-checked=true] .chk,.opt[aria-pressed=true] .chk{background:var(--cyan);border-color:var(--cyan)}
+.opt[aria-checked=true] .chk svg,.opt[aria-pressed=true] .chk svg{stroke-dashoffset:0}
+@keyframes pop{0%{scale:1}40%{scale:.94}100%{scale:1}}
+
+
+.o-list{list-style:none;display:grid;gap:7px;margin:8px 0 6px;font-size:.9rem;color:var(--pearl);line-height:1.5}
+.o-list li{display:flex;gap:9px;align-items:flex-start}
+.o-list li::before{content:"";flex:none;width:7px;height:7px;margin-top:.55em;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
+.opt.pack .o-name{font-family:var(--display);font-size:1.25rem}
+.opt.pack .o-price{font-size:1.3rem;font-family:var(--display);padding-top:12px}
+#o-pack{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+#o-addon{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.opt.addon .o-price{font-family:var(--display);font-size:1.1rem;color:var(--cyan);padding-top:4px}
+
+/* form */
+.form{display:grid;gap:18px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.field{display:grid;gap:6px}
+.field label{font-size:.88rem;color:var(--muted)}
+.in{width:100%;padding:14px 16px;border-radius:18px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);outline:none;
+  backdrop-filter:blur(10px);transition:border-color .3s,box-shadow .3s,background .3s;color-scheme:dark}
+textarea.in{resize:vertical;min-height:90px}
+.in::placeholder{color:rgba(244,241,255,.35)}
+.in:focus{border-color:var(--cyan);box-shadow:0 0 0 4px rgba(111,240,255,.16);background:rgba(255,255,255,.1)}
+.in.err{border-color:var(--rose);box-shadow:0 0 0 4px rgba(255,107,139,.18);animation:shake .45s}
+@keyframes shake{20%,60%{transform:translateX(7px)}40%,80%{transform:translateX(-7px)}}
+.group-title{font-weight:600;margin-bottom:-6px}
+.reveal{display:grid;grid-template-rows:0fr;opacity:0;transition:grid-template-rows .6s var(--out),opacity .5s}
+.reveal.open{grid-template-rows:1fr;opacity:1}
+.reveal>div{overflow:hidden;min-height:0;display:grid;gap:18px;padding:0 4px}
+.reveal.open>div{padding:4px}
+.msg{min-height:1.6em;color:var(--rose);font-size:.95rem}
+
+/* summary */
+.sum{position:sticky;top:92px;border-radius:32px;padding:28px 26px}
+.sum h3{font-family:var(--display);font-size:1.5rem;margin-bottom:16px}
+.sum ul{list-style:none;display:grid;gap:2px;margin-bottom:18px}
+.sum li{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px dashed rgba(255,255,255,.14);font-size:.95rem;animation:rowIn .5s var(--out)}
+.sum li span{color:var(--muted)}
+.sum li b{font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums}
+@keyframes rowIn{from{opacity:0;transform:translateY(8px)}}
+.total{display:flex;align-items:baseline;gap:10px;margin:8px 0 22px}
+.total span{color:var(--muted)}
+.total strong{font-family:var(--display);font-size:clamp(2.4rem,4vw,3.3rem);line-height:1;font-variant-numeric:tabular-nums;
+  background:linear-gradient(135deg,#fff,var(--cyan) 60%,var(--peach));-webkit-background-clip:text;background-clip:text;color:transparent}
+.total strong.bump{animation:bump .5s var(--spring)}
+@keyframes bump{40%{transform:scale(1.08)}}
+.fine{margin-top:14px;color:var(--muted);font-size:.84rem;text-align:center}
+
+.mbar{display:none;position:fixed;bottom:14px;left:12px;right:12px;z-index:45;border-radius:999px;padding:10px;
+  align-items:center;justify-content:space-between;gap:10px;transform:translateY(140%);transition:transform .6s var(--out)}
+.mbar.show{transform:none}
+.mbar div{padding-inline-start:14px;line-height:1.3}
+.mbar small{color:var(--muted);font-size:.78rem;display:block}
+.mbar strong{font-family:var(--display);font-size:1.3rem;font-variant-numeric:tabular-nums}
+.mbar .btn{width:auto;padding:12px 22px;font-size:.95rem}
+
+footer{text-align:center;padding:40px 20px 120px;color:var(--muted);font-size:.9rem;border-top:1px solid rgba(255,255,255,.08)}
+
+/* shutter */
+.shutter{position:fixed;inset:0;z-index:100;display:grid;place-items:center;opacity:0;pointer-events:none;
+  background:radial-gradient(circle at 50% 50%,transparent var(--r,150vmax),#05060b calc(var(--r,150vmax) + 2px))}
+.shutter.on{opacity:1;pointer-events:auto}
+.shutter p{font-family:var(--display);font-size:1.5rem;opacity:0;transition:opacity .4s}
+.shutter.flash::before{content:"";position:absolute;inset:0;background:#fff;animation:flash .6s ease-out forwards}
+.shutter.flash p{opacity:1}
+.shutter.flash{background:#05060b}
+@keyframes flash{from{opacity:1}to{opacity:0}}
+
+/* responsive */
+@media (max-width:980px){
+  .book-grid{grid-template-columns:1fr}
+  .sum{position:relative;top:0}
+  .mbar{display:flex}
+  .chip{display:none}
+  .hero{align-items:flex-end;padding-bottom:110px}
+}
+@media (max-width:560px){
+  .row{grid-template-columns:1fr}
+  .nav{padding-inline:10px 8px}
+  .brand{font-size:1.15rem;padding-inline-start:2px;gap:6px}
+  .brand svg{width:24px;height:24px}
+  .lang button{padding:6px 9px}
+  .nav .btn{padding:9px 13px;font-size:.82rem}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important}
+  .marquee div{animation:none}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="lg" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency=".012 .02" numOctaves="2" seed="3" result="n"/>
+    <feGaussianBlur in="n" stdDeviation="2" result="b"/>
+    <feDisplacementMap in="SourceGraphic" in2="b" scale="26" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+  <symbol id="aperture" viewBox="0 0 32 32">
+    <circle cx="16" cy="16" r="14.5" fill="none" stroke="currentColor" stroke-width="1.6"/>
+    <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round">
+      <path d="M16 1.5 L24 15 M30.5 16 L17 24 M16 30.5 L8 17 M1.5 16 L15 8"/>
+      <path d="M26.7 5.3 L12 8 M26.7 26.7 L24 12 M5.3 26.7 L20 24 M5.3 5.3 L8 20"/>
+    </g>
+  </symbol>
+</svg>
+
+<div class="aurora"><i></i><i></i><i></i></div>
+<canvas id="gl"></canvas>
+<div class="grain"></div>
+<div class="progress" id="progress"></div>
+<div class="cur" id="cur"></div>
+
+<header class="nav glass liquid">
+  <a class="brand" href="#top"><svg style="color:var(--cyan)"><use href="#aperture"/></svg><span data-i="brand"></span></a>
+  <div class="lang" role="group" aria-label="Language / اللغة / Langue">
+    <button type="button" data-l="ar" lang="ar" title="العربية">AR</button>
+    <button type="button" data-l="fr" lang="fr" title="Français">FR</button>
+    <button type="button" data-l="en" lang="en" title="English">EN</button>
+  </div>
+  <a class="btn primary sm magnetic" href="#book" data-i="navCta"></a>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="hero-copy">
+      <h1 id="h1"></h1>
+      <p class="lead" data-i="lead"></p>
+      <div class="cta">
+        <a class="btn primary magnetic" href="#book" data-i="cta"></a>
+        <small data-i="ctaNote"></small>
+      </div>
+    </div>
+    <div class="chip c1 glass" data-depth="26"><b style="--c:var(--cyan)"></b><span data-i="chip1"></span></div>
+    <div class="chip c2 glass" data-depth="-18"><b style="--c:var(--peach)"></b><span data-i="chip2"></span></div>
+    <div class="chip c3 glass" data-depth="34"><b style="--c:#9a7cff"></b><span data-i="chip3"></span></div>
+    <div class="scrollhint"></div>
+  </section>
+
+  <div class="marquee" aria-hidden="true">
+    <div id="mq"></div>
+  </div>
+
+  <section class="book" id="book">
+    <div class="book-head">
+      <h2 data-i="bookH"></h2>
+      <p data-i="bookP"></p>
+    </div>
+
+    <div class="book-grid">
+      <div class="steps">
+        <section class="step glass"><h3><span class="num">1</span><span data-i="s1"></span></h3><div class="opts" id="o-event" role="radiogroup" data-al="s1"></div></section>
+        <section class="step glass"><h3><span class="num">2</span><span data-i="s2"></span></h3><div class="opts" id="o-pack" role="radiogroup" data-al="s2"></div></section>
+        <section class="step glass"><h3><span class="num">3</span><span data-i="s3"></span></h3><div class="opts" id="o-addon" role="group" data-al="s3"></div></section>
+
+        <section class="step glass" id="formStep">
+          <h3><span class="num">4</span><span data-i="s4"></span></h3>
+          <div class="form">
+            <p class="group-title" data-i="yourName"></p>
+            <div class="row">
+              <div class="field"><label for="fn" data-i="fn"></label><input class="in" id="fn" autocomplete="given-name" data-ph="fnPh"></div>
+              <div class="field"><label for="ln" data-i="ln"></label><input class="in" id="ln" autocomplete="family-name" data-ph="lnPh"></div>
+            </div>
+
+            <div class="reveal" id="partnerWrap"><div>
+              <p class="group-title" id="partnerTitle"></p>
+              <div class="row">
+                <div class="field"><label for="pfn" data-i="fn"></label><input class="in" id="pfn" data-ph="pfnPh"></div>
+                <div class="field"><label for="pln" data-i="ln"></label><input class="in" id="pln" data-ph="plnPh"></div>
+              </div>
+            </div></div>
+
+            <div class="reveal" id="extraWrap"><div>
+              <div class="field"><label for="xi" id="xl"></label><input class="in" id="xi"></div>
+            </div></div>
+
+            <div class="row">
+              <div class="field"><label for="dt" data-i="date"></label><input class="in" type="date" id="dt"></div>
+              <div class="field"><label for="pl" data-i="place"></label><input class="in" id="pl" data-ph="placePh"></div>
+            </div>
+            <div class="field"><label for="nt" data-i="notes"></label><textarea class="in" id="nt" data-ph="notesPh"></textarea></div>
+            <p class="msg" id="msg" role="alert" aria-live="polite"></p>
+          </div>
+        </section>
+      </div>
+
+      <aside class="sum glass liquid" id="sum">
+        <h3 data-i="sumH"></h3>
+        <ul id="lines"></ul>
+        <div class="total"><span data-i="total"></span><strong id="total">0</strong><span data-i="cur"></span></div>
+        <button class="btn wa magnetic" id="send" type="button">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2a9.9 9.9 0 0 0-8.5 15l-1.5 5.5 5.6-1.47A9.94 9.94 0 1 0 12.04 2Zm5.8 14.1c-.25.7-1.45 1.33-2 1.4-.52.08-1.17.1-1.9-.12a17 17 0 0 1-1.72-.64c-3.02-1.3-5-4.34-5.15-4.54-.15-.2-1.23-1.64-1.23-3.13s.78-2.22 1.06-2.52c.28-.3.6-.38.8-.38l.58.01c.19 0 .43-.07.68.52.25.6.85 2.08.93 2.23.07.15.12.33.02.52-.1.2-.15.32-.3.5l-.45.52c-.15.15-.3.31-.13.6.17.3.77 1.27 1.65 2.06 1.13 1 2.09 1.32 2.39 1.47.3.15.47.12.65-.07.17-.2.75-.87.95-1.17.2-.3.4-.25.67-.15.28.1 1.76.83 2.06.98.3.15.5.22.57.35.08.12.08.72-.17 1.42Z"/></svg>
+          <span data-i="send"></span>
+        </button>
+        <p class="fine" data-i="fine"></p>
+      </aside>
+    </div>
+  </section>
+</main>
+
+<footer>© <span id="yr"></span> <span data-i="footer"></span></footer>
+
+<div class="mbar glass" id="mbar">
+  <div><small data-i="total"></small><strong id="mtotal">0</strong></div>
+  <button class="btn wa" id="msend" type="button" data-i="mSend"></button>
+</div>
+
+<div class="shutter" id="shutter"><p data-i="sending"></p></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* =====================================================================
+   الإعدادات / Settings / Réglages
+   whatsapp : رقم الواتساب بالصيغة الدولية بدون + (مثال الجزائر: 213550123456)
+   msgLang  : null = رسالة واتساب بلغة الزبون | 'ar' أو 'fr' أو 'en' = لغة ثابتة دائمًا
+   ===================================================================== */
+const CONFIG = { whatsapp: '213795567158', msgLang: null };
+
+/* ---------------- translations ---------------- */
+const T = {
+  ar:{ dir:'rtl', brand:'My Vision', title:'My Vision | تصوير المناسبات', cur:'دج', navCta:'اختر باقتك',
+    h1:'كل لحظة تستحق أن تُحفظ كفيلم',
+    lead:'اختر المناسبة والباقة التي تناسبك، ثم أرسل طلبك إلى واتساب بضغطة واحدة.',
+    cta:'اكتشف الباقات', ctaNote:'بدون التزام، وتُؤكَّد التفاصيل معك على واتساب',
+    chip1:'4K Cinematic', chip2:'Livre photo', chip3:'USB صور لانهائية',
+    marquee:['زفاف','ختان','عيد ميلاد','تخرج','خطوبة'],
+    bookH:'اختر باقتك', bookP:'اختر المناسبة ثم الباقة، ولا يُرسل شيء قبل أن تضغط زر الإرسال.',
+    s1:'نوع المناسبة', s2:'اختر الباقة', s3:'الإضافات (اختياري)', s4:'بياناتك',
+    yourName:'اسمك', fn:'الاسم', ln:'اللقب', fnPh:'مثال: محمد', lnPh:'مثال: بن علي',
+    partnerReq:'الزوج / الزوجة', partnerOpt:'الطرف الآخر (اختياري)', pfnPh:'اسم الزوج / الزوجة', plnPh:'اللقب',
+    date:'تاريخ المناسبة (اختياري)', place:'المدينة أو القاعة (اختياري)', placePh:'مثال: قاعة الأحلام، وهران',
+    notes:'ملاحظات (اختياري)', notesPh:'أي تفصيل تحب أن نعرفه',
+    sumH:'ملخّص طلبك', total:'المجموع', send:'أرسل الطلب عبر واتساب', fine:'تُؤكَّد التفاصيل النهائية معك على واتساب.',
+    mSend:'اطلب الآن', footer:'My Vision لتصوير المناسبات', sending:'جارٍ فتح واتساب…',
+    errPack:'اختر باقة واحدة قبل الإرسال.', incl:'مشمول', from:'يبدأ من', lPack:'الباقة', lAddon:'إضافة',
+    errName:'أدخل اسمك ولقبك قبل الإرسال.', errBoth:'أدخل اسمك ولقبك واسم ولقب الزوج / الزوجة قبل الإرسال.', errPartner:'أدخل اسم ولقب الزوج / الزوجة قبل الإرسال.',
+    m:{title:'طلب حجز جديد من موقع', name:'الاسم', spouse:'الزوج / الزوجة', event:'المناسبة', date:'التاريخ', place:'المكان', pack:'الباقة', addons:'الإضافات', notes:'ملاحظات', total:'السعر', sep:'، '} },
+  fr:{ dir:'ltr', brand:'My Vision', title:'My Vision | Photographie d’événements', cur:'DZD', navCta:'Choisir un pack',
+    h1:'Chaque moment mérite d’être gardé comme un film',
+    lead:'Choisissez l’événement et le pack qui vous convient, puis envoyez votre demande sur WhatsApp en un clic.',
+    cta:'Découvrir les packs', ctaNote:'Sans engagement, les détails sont confirmés avec vous sur WhatsApp',
+    chip1:'4K Cinématique', chip2:'Livre photo', chip3:'USB photos illimitées',
+    marquee:['Mariage','Circoncision','Anniversaire','Diplôme','Fiançailles'],
+    bookH:'Choisissez votre pack', bookP:'Choisissez l’événement puis le pack. Rien n’est envoyé avant que vous appuyiez sur le bouton.',
+    s1:'Type d’événement', s2:'Choisissez votre pack', s3:'Options supplémentaires (facultatif)', s4:'Vos informations',
+    yourName:'Votre nom', fn:'Prénom', ln:'Nom', fnPh:'Ex. : Mohamed', lnPh:'Ex. : Benali',
+    partnerReq:'Époux / Épouse', partnerOpt:'L’autre personne (facultatif)', pfnPh:'Prénom du conjoint(e)', plnPh:'Nom',
+    date:'Date de l’événement (facultatif)', place:'Ville ou salle (facultatif)', placePh:'Ex. : Salle des Rêves, Oran',
+    notes:'Remarques (facultatif)', notesPh:'Tout détail utile',
+    sumH:'Résumé de votre demande', total:'Total', send:'Envoyer sur WhatsApp', fine:'Les détails définitifs sont confirmés avec vous sur WhatsApp.',
+    mSend:'Commander', footer:'My Vision, photographie d’événements', sending:'Ouverture de WhatsApp…',
+    errPack:'Choisissez un pack avant d’envoyer.', incl:'Inclus', from:'À partir de', lPack:'Pack', lAddon:'Option',
+    errName:'Saisissez votre prénom et votre nom avant d’envoyer.', errBoth:'Saisissez votre nom et celui de votre conjoint(e) avant d’envoyer.', errPartner:'Saisissez le prénom et le nom du conjoint(e).',
+    m:{title:'Nouvelle demande de réservation via le site', name:'Nom', spouse:'Conjoint(e)', event:'Événement', date:'Date', place:'Lieu', pack:'Pack', addons:'Options', notes:'Remarques', total:'Prix', sep:', '} },
+  en:{ dir:'ltr', brand:'My Vision', title:'My Vision | Event photography', cur:'DZD', navCta:'Pick a pack',
+    h1:'Every moment deserves to be kept like a film',
+    lead:'Pick the event and the pack that suits you, then send your request on WhatsApp in one tap.',
+    cta:'See the packs', ctaNote:'No commitment, details are confirmed with you on WhatsApp',
+    chip1:'4K Cinematic', chip2:'Photo book', chip3:'USB unlimited photos',
+    marquee:['Wedding','Circumcision','Birthday','Graduation','Engagement'],
+    bookH:'Choose your pack', bookP:'Pick the event, then the pack. Nothing is sent until you press the button.',
+    s1:'Event type', s2:'Choose your pack', s3:'Add-ons (optional)', s4:'Your details',
+    yourName:'Your name', fn:'First name', ln:'Last name', fnPh:'e.g. Mohamed', lnPh:'e.g. Benali',
+    partnerReq:'Spouse', partnerOpt:'Partner (optional)', pfnPh:'Spouse’s first name', plnPh:'Last name',
+    date:'Event date (optional)', place:'City or venue (optional)', placePh:'e.g. Dream Hall, Oran',
+    notes:'Notes (optional)', notesPh:'Anything we should know',
+    sumH:'Your order summary', total:'Total', send:'Send via WhatsApp', fine:'Final details are confirmed with you on WhatsApp.',
+    mSend:'Order now', footer:'My Vision event photography', sending:'Opening WhatsApp…',
+    errPack:'Choose one pack before sending.', incl:'Included', from:'From', lPack:'Pack', lAddon:'Option',
+    errName:'Enter your first and last name before sending.', errBoth:'Enter your name and your spouse’s name before sending.', errPartner:'Enter your spouse’s first and last name.',
+    m:{title:'New booking request from the site', name:'Name', spouse:'Spouse', event:'Event', date:'Date', place:'Venue', pack:'Pack', addons:'Add-ons', notes:'Notes', total:'Price', sep:', '} }
+};
+
+/* ---------------- data: packs + events, 3 languages ----------------
+   price = السعر / prix / price  ( L(ar, fr, en) ) */
+const L = (ar,fr,en) => ({ar,fr,en});
+const DATA = {
+  event: [
+    { id:'wedding',    icon:'💍', partner:'req',
+      name:L('زفاف','Mariage','Wedding'), desc:L('تغطية كاملة من الاستقبال إلى الختام','Couverture complète, de l’accueil à la clôture','Full coverage from the welcome to the last dance') },
+    { id:'engagement', icon:'🥂', partner:'opt',
+      name:L('خطوبة','Fiançailles','Engagement'), desc:L('لحظات الخطوبة بتفاصيلها الدافئة','Les moments chaleureux de vos fiançailles','The warm details of your engagement') },
+    { id:'circ',       icon:'👶',
+      name:L('ختان','Circoncision','Circumcision'), desc:L('توثيق اليوم العائلي بكل فرحته','Toute la joie de la journée en famille','The whole family day, captured with joy'),
+      extra:{label:L('اسم الطفل (اختياري)','Prénom de l’enfant (facultatif)','Child’s name (optional)'), ph:L('اسم الطفل','Prénom de l’enfant','Child’s name')} },
+    { id:'birthday',   icon:'🎂',
+      name:L('عيد ميلاد','Anniversaire','Birthday'), desc:L('ضحكات الأطفال والشموع والهدايا','Rires, bougies et cadeaux','Laughter, candles and gifts'),
+      extra:{label:L('اسم صاحب أو صاحبة العيد (اختياري)','Prénom de la personne fêtée (facultatif)','Birthday person’s name (optional)'), ph:L('الاسم','Prénom','Name')} },
+    { id:'grad',       icon:'🎓',
+      name:L('تخرج','Remise de diplôme','Graduation'), desc:L('صور وفيديو يليقان بالإنجاز','Photos et vidéo à la hauteur de l’exploit','Photos and video worthy of the achievement') }
+  ],
+  addon: [
+    { id:'cortege', price:5000,  name:L('موكب الحفل','Cortège de la fête','Cortege of a ceremony') },
+    { id:'men',     price:25000, name:L('عمل رجالي services homme','Services homme','Men’s services') },
+    { id:'drone',   price:25000, name:L('درون','Drone','Drone') },
+    { id:'evening', price:10000, name:L('أمسية','Soirée','Evening') }
+  ],
+  pack: [
+    { id:'basic', price:40000,
+      name:L('Pack My Vision','Pack My Vision','Pack My Vision'),
+      items:[
+        L('كتاب صور Livre photo 120 صورة','Livre photo 120 photos','Photo book, 120 photos'),
+        L('فيديو 4K','Vidéo 4K','4K video'),
+        L('صور لانهائية في مفتاح USB','Photos illimitées sur clé USB','Unlimited photos on a USB drive')
+      ] },
+    { id:'gold', price:50000,
+      name:L('Pack My Vision Gold','Pack My Vision Gold','Pack My Vision Gold'),
+      items:[
+        L('كتاب صور Livre photo 120 صورة','Livre photo 120 photos','Photo book, 120 photos'),
+        L('فيديو 4K سينمائية','Vidéo 4K cinématique','Cinematic 4K video'),
+        L('عدد صور لانهائي في USB','Nombre de photos illimité sur USB','Unlimited photos on USB'),
+        L('كتاب مخصص للعروسين','Book spécial mariés','Special wedding book')
+      ] },
+    { id:'premium', price:65000,
+      name:L('Pack My Vision Premium','Pack My Vision Premium','Pack My Vision Premium'),
+      items:[
+        L('كتاب صور Livre photo 140 صورة','Livre photo 140 photos','Photo book, 140 photos'),
+        L('Book XXL','Book XXL','Book XXL'),
+        L('فيديو 4K سينمائية','Vidéo 4K cinématique','Cinematic 4K video'),
+        L('ملخص (Teaser) (Résumé)','Résumé (Teaser)','Summary (Teaser)'),
+        L('صور لانهائية في USB مغلف بفخامة','Photos illimitées sur USB sous coffret de luxe','Unlimited photos on a luxuriously packaged USB')
+      ] }
+  ]
+};
+
+/* ---------------- helpers ---------------- */
+const $ = s => document.querySelector(s);
+const fmt = n => n.toLocaleString('en-US');
+const S = { event:'wedding', pack:null, addon:new Set() };
+let LANG = 'ar';
+const t = () => T[LANG];
+const tr = x => (x && typeof x === 'object') ? x[LANG] : x;
+const find = (k,id) => DATA[k].find(x => x.id === id);
+$('#yr').textContent = new Date().getFullYear();
+$('#dt').min = new Date().toISOString().split('T')[0];
+
+/* ---------------- static text, hero title, marquee ---------------- */
+function applyStatic(){
+  const T_ = t();
+  document.querySelectorAll('[data-i]').forEach(e=>{ e.textContent = T_[e.dataset.i]; });
+  document.querySelectorAll('[data-ph]').forEach(e=>{ e.placeholder = T_[e.dataset.ph]; });
+  document.querySelectorAll('[data-al]').forEach(e=>{ e.setAttribute('aria-label', T_[e.dataset.al]); });
+}
+function splitTitle(delay){
+  const h = $('#h1'); h.style.setProperty('--d0', delay);
+  h.innerHTML = t().h1.split(/\s+/).map((w,i)=>`<span class="w"><span style="--i:${i}">${w}</span></span>`).join(' ');
+}
+function buildMarquee(){
+  const one = t().marquee.map(w=>`<span>${w}<svg style="color:var(--cyan)"><use href="#aperture"/></svg></span>`).join('');
+  $('#mq').innerHTML = one+one+one+one;
+}
+
+/* ---------------- option cards ---------------- */
+const CHECK = '<span class="chk"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>';
+function card(k,o){
+  const b = document.createElement('button');
+  b.type='button'; b.className='opt'+(k==='pack'?' pack':'')+(k==='addon'?' addon':''); b.dataset.id=o.id;
+  b.setAttribute('role', k==='addon' ? 'checkbox' : 'radio');
+  if(k==='addon'){
+    b.innerHTML = `<span class="o-name">${tr(o.name)}</span><span class="o-price">+ ${fmt(o.price)} ${t().cur}</span>${CHECK}`;
+  } else if(k==='pack'){
+    b.innerHTML = `<span class="o-name">${tr(o.name)}</span>`+
+      `<ul class="o-list">${o.items.map(i=>`<li>${tr(i)}</li>`).join('')}</ul>`+
+      `<span class="o-price">${fmt(o.price)} ${t().cur}</span>${CHECK}`;
+  } else {
+    b.innerHTML = (o.icon?`<span class="o-icon">${o.icon}</span>`:'')+
+      `<span class="o-name">${tr(o.name)}</span><span class="o-desc">${tr(o.desc)}</span>${CHECK}`;
+  }
+  return b;
+}
+function buildGroup(k){
+  const box = $('#o-'+k); box.innerHTML='';
+  DATA[k].forEach(o=>{
+    const b = card(k,o);
+    if(k==='addon'){
+      b.setAttribute('aria-checked', S.addon.has(o.id));
+      b.onclick = ()=>{ S.addon.has(o.id) ? S.addon.delete(o.id) : S.addon.add(o.id); update(); };
+    } else {
+      b.setAttribute('aria-checked', S[k]===o.id);
+      b.onclick = ()=>{ S[k]=o.id; update(); };
+    }
+    box.appendChild(b);
+  });
+}
+function refreshChecked(){
+  ['event','pack'].forEach(k=>{
+    document.querySelectorAll('#o-'+k+' .opt').forEach(b=>b.setAttribute('aria-checked', S[k]===b.dataset.id));
+  });
+  document.querySelectorAll('#o-addon .opt').forEach(b=>b.setAttribute('aria-checked', S.addon.has(b.dataset.id)));
+}
+
+/* ---------------- price + summary ---------------- */
+let shown = 0, raf;
+function compute(){
+  const ev = find('event',S.event), pk = S.pack ? find('pack',S.pack) : null;
+  const lines = [[tr(ev.name), null]];
+  let total = 0;
+  if(pk){ lines.push([t().lPack+': '+tr(pk.name), pk.price]); total += pk.price; }
+  DATA.addon.filter(a=>S.addon.has(a.id)).forEach(a=>{ lines.push([t().lAddon+': '+tr(a.name), a.price]); total += a.price; });
+  return { lines, total };
+}
+function animateTotal(target){
+  cancelAnimationFrame(raf);
+  const from = shown, t0 = performance.now(), D = 800;
+  const el = $('#total'), m = $('#mtotal');
+  el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump');
+  (function step(now){
+    const k = Math.min(1,(now-t0)/D), e = 1-Math.pow(1-k,4);
+    shown = Math.round(from+(target-from)*e);
+    el.textContent = fmt(shown); m.textContent = fmt(shown)+' '+t().cur;
+    if(k<1) raf = requestAnimationFrame(step);
+  })(t0);
+}
+function update(){
+  const ev = find('event',S.event);
+  $('#partnerWrap').classList.toggle('open', !!ev.partner);
+  $('#partnerTitle').textContent = ev.partner==='opt' ? t().partnerOpt : t().partnerReq;
+  $('#extraWrap').classList.toggle('open', !!ev.extra);
+  if(ev.extra){ $('#xl').textContent = tr(ev.extra.label); $('#xi').placeholder = tr(ev.extra.ph); }
+  refreshChecked();
+  const {lines,total} = compute();
+  $('#lines').innerHTML = lines.map(l=>`<li><span>${l[0]}</span><b>${l[1]==null?'':fmt(l[1])}</b></li>`).join('');
+  animateTotal(total);
+}
+
+/* ---------------- validation + WhatsApp ---------------- */
+function validate(){
+  const ev = find('event',S.event);
+  const need = ['fn','ln']; if(ev.partner==='req') need.push('pfn','pln');
+  let first = null;
+  document.querySelectorAll('.in.err').forEach(i=>i.classList.remove('err'));
+  need.forEach(id=>{
+    const el = $('#'+id);
+    if(!el.value.trim()){ void el.offsetWidth; el.classList.add('err'); first = first||el; }
+  });
+  const msg = $('#msg');
+  if(!S.pack){
+    msg.textContent = t().errPack;
+    $('#o-pack').scrollIntoView({behavior:'smooth',block:'center'});
+    return false;
+  }
+  if(first){
+    const selfOk = $('#fn').value.trim() && $('#ln').value.trim();
+    const partnerBad = ev.partner==='req' && (!$('#pfn').value.trim()||!$('#pln').value.trim());
+    msg.textContent = (selfOk && partnerBad) ? t().errPartner : (ev.partner==='req' ? t().errBoth : t().errName);
+    first.scrollIntoView({behavior:'smooth',block:'center'});
+    setTimeout(()=>first.focus({preventScroll:true}),500);
+    return false;
+  }
+  msg.textContent=''; return true;
+}
+function buildMessage(){
+  const ml = (CONFIG.msgLang && T[CONFIG.msgLang]) ? CONFIG.msgLang : LANG;
+  const M = T[ml].m, pick = x => (x && typeof x==='object') ? x[ml] : x;
+  const ev = find('event',S.event), {total} = compute();
+  const val = id => $('#'+id).value.trim();
+  const out = [`📸 ${M.title} ${T[ml].brand}`, '━━━━━━━━━━'];
+  out.push(`👤 ${M.name}: ${val('fn')} ${val('ln')}`);
+  if(ev.partner && (val('pfn')||val('pln'))) out.push(`💑 ${M.spouse}: ${val('pfn')} ${val('pln')}`);
+  if(ev.extra && val('xi')) out.push(`🎈 ${pick(ev.extra.label).replace(/\s*\([^)]*\)/,'')}: ${val('xi')}`);
+  out.push(`🎉 ${M.event}: ${pick(ev.name)}`);
+  if(val('dt')) out.push(`📅 ${M.date}: ${val('dt')}`);
+  if(val('pl')) out.push(`📍 ${M.place}: ${val('pl')}`);
+  const pk = find('pack',S.pack);
+  out.push(`📦 ${M.pack}: ${pick(pk.name)}`);
+  pk.items.forEach(i=>out.push(`   • ${pick(i)}`));
+  const ads = DATA.addon.filter(a=>S.addon.has(a.id));
+  if(ads.length){
+    out.push(`➕ ${M.addons}:`);
+    ads.forEach(a=>out.push(`   • ${pick(a.name)} (+${fmt(a.price)} ${T[ml].cur})`));
+  }
+  if(val('nt')) out.push(`📝 ${M.notes}: ${val('nt')}`);
+  out.push('━━━━━━━━━━', `💰 ${M.total}: ${fmt(total)} ${T[ml].cur}`);
+  return out.join('\n');
+}
+function shutter(done){
+  const sh = $('#shutter'); sh.classList.remove('flash'); sh.classList.add('on');
+  const R = Math.hypot(innerWidth,innerHeight), t0 = performance.now(), D = 900;
+  (function f(now){
+    const k = Math.min(1,(now-t0)/D), e = k*k*(3-2*k);
+    sh.style.setProperty('--r',(R*(1-e))+'px');
+    if(k<1) requestAnimationFrame(f); else { sh.classList.add('flash'); setTimeout(done,450); }
+  })(t0);
+}
+function send(){
+  if(!validate()) return;
+  const url = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(buildMessage())}`;
+  shutter(()=>{ window.location.href = url; });
+}
+addEventListener('pageshow',()=>{ const sh=$('#shutter'); sh.classList.remove('on','flash'); sh.style.removeProperty('--r'); });
+$('#send').onclick = send;
+$('#msend').onclick = send;
+document.querySelectorAll('.in').forEach(i=>i.addEventListener('input',()=>i.classList.remove('err')));
+
+/* ---------------- language ---------------- */
+function applyLang(l, first){
+  LANG = T[l] ? l : 'ar';
+  try{ localStorage.setItem('lang', LANG); }catch(e){}
+  const h = document.documentElement; h.lang = LANG; h.dir = T[LANG].dir;
+  document.title = T[LANG].title;
+  applyStatic(); splitTitle(first ? '.45s' : '.05s'); buildMarquee();
+  document.querySelectorAll('.lang button').forEach(b=>b.setAttribute('aria-pressed', b.dataset.l===LANG));
+  ['event','pack','addon'].forEach(k=>buildGroup(k));
+  $('#msg').textContent = '';
+  update();
+}
+document.querySelectorAll('.lang button').forEach(b=>b.addEventListener('click',()=>applyLang(b.dataset.l,false)));
+let saved = null; try{ saved = localStorage.getItem('lang'); }catch(e){}
+applyLang(saved && T[saved] ? saved : 'ar', true);
+
+/* ---------------- interactions: light, tilt, magnet, cursor ---------------- */
+document.addEventListener('pointermove', e=>{
+  const g = e.target.closest('.glass,.opt'); if(!g) return;
+  const r = g.getBoundingClientRect();
+  g.style.setProperty('--mx',(e.clientX-r.left)+'px'); g.style.setProperty('--my',(e.clientY-r.top)+'px');
+  if(g.classList.contains('opt') && e.pointerType==='mouse'){
+    const px=(e.clientX-r.left)/r.width-.5, py=(e.clientY-r.top)/r.height-.5;
+    g.style.setProperty('--ry',(px*10)+'deg'); g.style.setProperty('--rx',(-py*10)+'deg');
+  }
+});
+document.addEventListener('pointerout', e=>{
+  const g = e.target.closest('.opt'); if(g){ g.style.setProperty('--rx','0deg'); g.style.setProperty('--ry','0deg'); }
+});
+document.querySelectorAll('.magnetic').forEach(b=>{
+  b.addEventListener('pointermove',e=>{
+    if(e.pointerType!=='mouse') return;
+    const r=b.getBoundingClientRect();
+    b.style.transform=`translate(${(e.clientX-r.left-r.width/2)*.25}px,${(e.clientY-r.top-r.height/2)*.35}px)`;
+  });
+  b.addEventListener('pointerleave',()=>{ b.style.transform=''; });
+});
+if(matchMedia('(hover:hover) and (pointer:fine)').matches){
+  const c=$('#cur'); let x=-100,y=-100,tx=-100,ty=-100,s=1,ts=1;
+  addEventListener('pointermove',e=>{ tx=e.clientX; ty=e.clientY; c.style.opacity=1; });
+  document.addEventListener('pointerover',e=>{ ts = e.target.closest('button,a,input,textarea,.opt') ? 1.9 : 1; });
+  (function l(){ x+=(tx-x)*.18; y+=(ty-y)*.18; s+=(ts-s)*.15;
+    c.style.transform=`translate(${x}px,${y}px) translate(-50%,-50%) scale(${s})`; requestAnimationFrame(l); })();
+}
+
+/* ---------------- scroll: progress, reveal, mobile bar, chips parallax ---------------- */
+const prog = $('#progress');
+const chips = document.querySelectorAll('.chip');
+addEventListener('scroll',()=>{
+  const h = document.documentElement.scrollHeight - innerHeight;
+  prog.style.transform = `scaleX(${h>0?scrollY/h:0})`;
+  chips.forEach(c=>{ c.style.setProperty('--py',(-scrollY*parseFloat(c.dataset.depth)/100)+'px'); });
+},{passive:true});
+const io = new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} }),{threshold:.12});
+document.querySelectorAll('.step').forEach(s=>io.observe(s));
+(function(){
+  const bar = $('#mbar'); let inBook=false, sumVisible=false;
+  const upd = ()=> bar.classList.toggle('show', inBook && !sumVisible);
+  new IntersectionObserver(es=>{ inBook = es[0].isIntersecting; upd(); },{threshold:.05}).observe($('#book'));
+  new IntersectionObserver(es=>{ sumVisible = es[0].isIntersecting; upd(); },{threshold:.3}).observe($('#sum'));
+})();
+
+/* ---------------- 3D scene: glass camera lens ---------------- */
+(function(){
+  if(typeof THREE === 'undefined'){ return; }
+  const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const canvas = $('#gl');
+  let renderer;
+  try{ renderer = new THREE.WebGLRenderer({canvas,antialias:true,alpha:true,powerPreference:'high-performance'}); }catch(e){ return; }
+  renderer.setPixelRatio(Math.min(devicePixelRatio,1.75));
+  renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.15;
+  renderer.outputEncoding = THREE.sRGBEncoding;
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(35,1,.1,100); camera.position.set(0,0,9);
+
+  // procedural studio environment (softboxes) so glass and metal have something to reflect
+  (function(){
+    const c = document.createElement('canvas'); c.width=1024; c.height=512; const x = c.getContext('2d');
+    const g = x.createLinearGradient(0,0,0,512); g.addColorStop(0,'#1b1550'); g.addColorStop(.5,'#07080f'); g.addColorStop(1,'#2a1230');
+    x.fillStyle=g; x.fillRect(0,0,1024,512);
+    [[90,110,170,230,'#ffffff'],[420,50,230,90,'#7ff3ff'],[760,130,150,240,'#ffb48a'],[290,330,270,60,'#b9a2ff'],[920,330,90,120,'#ffffff']]
+      .forEach(([a,b,w,h,col])=>{ x.shadowBlur=70; x.shadowColor=col; x.fillStyle=col; x.fillRect(a,b,w,h); });
+    const tex = new THREE.CanvasTexture(c); tex.mapping = THREE.EquirectangularReflectionMapping; tex.encoding = THREE.sRGBEncoding;
+    const pm = new THREE.PMREMGenerator(renderer); scene.environment = pm.fromEquirectangular(tex).texture; tex.dispose(); pm.dispose();
+  })();
+  const l1 = new THREE.DirectionalLight(0x6ff0ff,1.4); l1.position.set(-4,3,5); scene.add(l1);
+  const l2 = new THREE.DirectionalLight(0xffb089,1.1); l2.position.set(5,-2,4); scene.add(l2);
+
+  const rig = new THREE.Group(); scene.add(rig);
+  const lens = new THREE.Group(); rig.add(lens);
+
+  const metal = new THREE.MeshStandardMaterial({color:0x14141c,metalness:1,roughness:.28,envMapIntensity:1.5,side:THREE.DoubleSide});
+  const metalLight = new THREE.MeshStandardMaterial({color:0x34344a,metalness:1,roughness:.2,envMapIntensity:1.8});
+  const barrel = new THREE.Mesh(new THREE.CylinderGeometry(1.7,1.7,1.5,72,1,true),metal);
+  barrel.rotation.x = Math.PI/2; lens.add(barrel);
+
+  const ridges = new THREE.InstancedMesh(new THREE.BoxGeometry(.09,.13,.55),metalLight,96);
+  const d = new THREE.Object3D();
+  for(let i=0;i<96;i++){ const a=i/96*Math.PI*2; d.position.set(Math.cos(a)*1.74,Math.sin(a)*1.74,-.3); d.rotation.set(0,0,a); d.updateMatrix(); ridges.setMatrixAt(i,d.matrix); }
+  lens.add(ridges);
+
+  const bezel = new THREE.Mesh(new THREE.TorusGeometry(1.7,.1,24,96),metalLight); bezel.position.z=.75; lens.add(bezel);
+  const ringC = new THREE.Mesh(new THREE.TorusGeometry(1.48,.022,12,128),new THREE.MeshBasicMaterial({color:0x6ff0ff})); ringC.position.z=.72; lens.add(ringC);
+  const ringP = new THREE.Mesh(new THREE.TorusGeometry(1.34,.016,12,128),new THREE.MeshBasicMaterial({color:0xffb089})); ringP.position.z=.7; lens.add(ringP);
+
+  const back = new THREE.Mesh(new THREE.CircleGeometry(1.55,64),new THREE.MeshStandardMaterial({color:0x05050a,metalness:.8,roughness:.4}));
+  back.position.z=-.2; lens.add(back);
+
+  const iris = new THREE.Group(); iris.position.z=.05; lens.add(iris);
+  const bm = new THREE.MeshStandardMaterial({color:0x0c0c16,metalness:.9,roughness:.35,side:THREE.DoubleSide});
+  const blades=[]; for(let i=0;i<9;i++){ const b=new THREE.Mesh(new THREE.BoxGeometry(1.1,.62,.015),bm); b.position.z=i*.004; iris.add(b); blades.push(b); }
+  function setIris(tw){ blades.forEach((b,i)=>{ const a=i/9*Math.PI*2, r=.62+.1*Math.sin(tw); b.position.x=Math.cos(a)*r; b.position.y=Math.sin(a)*r; b.rotation.z=a+Math.PI/2+tw*.9; }); }
+
+  const coat = new THREE.Mesh(new THREE.CircleGeometry(1.2,64),new THREE.MeshStandardMaterial({color:0x2b1a6e,metalness:.9,roughness:.12,emissive:0x1a0a40,envMapIntensity:2}));
+  coat.position.z=.3; lens.add(coat);
+  const coatRing = new THREE.Mesh(new THREE.TorusGeometry(.72,.02,12,96),new THREE.MeshBasicMaterial({color:0x6ff0ff,transparent:true,opacity:.7})); coatRing.position.z=.34; lens.add(coatRing);
+  const dome = new THREE.Mesh(new THREE.SphereGeometry(1.3,72,40),new THREE.MeshPhysicalMaterial({color:0xaad8ff,metalness:0,roughness:.03,clearcoat:1,clearcoatRoughness:0,transparent:true,opacity:.36,envMapIntensity:2.4}));
+  dome.scale.set(1,1,.3); dome.position.z=.55; lens.add(dome);
+
+  const shardG = new THREE.Group(); rig.add(shardG);
+  const mats = [0x6ff0ff,0xffb089,0x9a7cff,0xffffff].map(c=>new THREE.MeshPhysicalMaterial({color:c,metalness:.1,roughness:.06,clearcoat:1,clearcoatRoughness:.05,transparent:true,opacity:.82,envMapIntensity:2.2}));
+  const geos = [new THREE.OctahedronGeometry(.22),new THREE.IcosahedronGeometry(.18,0),new THREE.TorusGeometry(.17,.06,20,40),new THREE.TorusKnotGeometry(.13,.045,80,10,2,3),new THREE.DodecahedronGeometry(.17)];
+  const shards=[]; for(let i=0;i<12;i++){
+    const m = new THREE.Mesh(geos[i%geos.length],mats[i%mats.length]);
+    m.userData = {r:2.7+Math.random()*2.6,a:Math.random()*6.28,sp:.12+Math.random()*.22,y:(Math.random()-.5)*3.2,ph:Math.random()*6,rs:.2+Math.random()*.6};
+    m.scale.setScalar(.8+Math.random()*1.1); shards.push(m); shardG.add(m);
+  }
+
+  let W=0,H=0,mobile=false;
+  function resize(){ W=innerWidth; H=innerHeight; mobile=W<980; renderer.setSize(W,H,false); camera.aspect=W/H; camera.updateProjectionMatrix(); }
+  addEventListener('resize',resize); resize();
+
+  let sp=0,mx=0,my=0,tmx=0,tmy=0,side=-1;
+  addEventListener('pointermove',e=>{ tmx=e.clientX/W-.5; tmy=e.clientY/H-.5; });
+  const lerp=(a,b,k)=>a+(b-a)*k, smooth=k=>k*k*(3-2*k);
+  const clock = new THREE.Clock();
+
+  function frame(){
+    requestAnimationFrame(frame);
+    if(document.hidden) return;
+    const time = reduce ? 0 : clock.getElapsedTime();
+    // lens sits opposite the text: left in RTL (-1), right in LTR (+1); glides over when the language changes
+    const targetSide = document.documentElement.dir==='rtl' ? -1 : 1;
+    side += (targetSide-side)*.05;
+    sp += (scrollY/H - sp)*.08; mx += (tmx-mx)*.06; my += (tmy-my)*.06;
+    const k = smooth(Math.min(1,Math.max(0,sp)));
+    const hero = mobile ? [0,1.35,0,.62] : [2.55*side,0,0,.9];
+    const rest = mobile ? [0,.2,-5.5,.55] : [0,0,-4.5,.85];
+    rig.position.set(lerp(hero[0],rest[0],k), lerp(hero[1],rest[1],k)+Math.sin(time*.8)*.08, lerp(hero[2],rest[2],k));
+    rig.scale.setScalar(lerp(hero[3],rest[3],k));
+    lens.rotation.y = .45*side + time*.16 + sp*1.9 + mx*.6;
+    lens.rotation.x = .12 + my*.45 + Math.sin(time*.5)*.05;
+    lens.rotation.z = sp*.4;
+    setIris(.5 + sp*.9 + Math.sin(time*.6)*.25);
+    shards.forEach(m=>{
+      const u=m.userData, a=u.a+time*u.sp;
+      m.position.set(Math.cos(a)*u.r*(mobile?.55:1), u.y+Math.sin(time*.7+u.ph)*.3, Math.sin(a)*u.r*.6);
+      m.rotation.x += .004*u.rs*(1+Math.abs(mx)*3); m.rotation.y += .006*u.rs;
+    });
+    renderer.render(scene,camera);
+  }
+  frame();
+})();
+</script>
+</body>
+</html>
